@@ -8,6 +8,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -41,6 +43,23 @@ public class QuestBoard extends RelativeLayout {
         questRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
         questListAdapter = new QuestListAdapter(quests);
         questRecycler.setAdapter(questListAdapter);
+
+        ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+                0
+                , ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
+        ) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                quests.remove(viewHolder.getAdapterPosition());
+                questListAdapter.notifyDataSetChanged();
+            }
+        });
+        touchHelper.attachToRecyclerView(questRecycler);
 
     }
 
