@@ -4,11 +4,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.Date;
 import java.util.List;
 
 public class QuestListAdapter extends RecyclerView.Adapter<QuestViewHolder> {
@@ -38,7 +42,7 @@ public class QuestListAdapter extends RecyclerView.Adapter<QuestViewHolder> {
 class QuestViewHolder extends RecyclerView.ViewHolder {
     private final String TAG = "QuestViewHolder";
     //private Quest quest;
-    private TextView questDisplay;
+    private CheckBox questDisplay;
     public QuestViewHolder(@NonNull View itemView) {
         super(itemView);
         questDisplay = itemView.findViewById(R.id.questInfoView);
@@ -46,5 +50,15 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
     public void setQuest(Quest quest) {
         Log.d(TAG, "Adding quest " + quest.info);
         questDisplay.setText(quest.info);
+        questDisplay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                quest.completed = isChecked;
+                if (isChecked) {
+                    quest.completionDate = new Date();
+                    Log.d(TAG, String.valueOf(quest.completionDate));
+                }
+            }
+        });
     }
 }

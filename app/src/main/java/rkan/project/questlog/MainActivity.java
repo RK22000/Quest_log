@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
@@ -12,6 +13,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity {
+    private String TAG = "MainActivity";
     private QuestBoard importantBoard, urgentBoard;
     private EditText questInput;
 
@@ -48,15 +50,27 @@ public class MainActivity extends AppCompatActivity {
         urgentBoard     = findViewById(R.id.urgentQuestBoard);
     }
 
-    public void addUrgentQuest(View view) {
+    public void addQuest(View view) {
         Quest quest = new Quest();
         quest.info = questInput.getText().toString();
-        urgentBoard.addQuest(quest);
-    }
+        QuestBoard board;
+        switch (view.getId()) {
+            case R.id.urgentQuestButton:
+                board = urgentBoard;
+                break;
+            case R.id.importantQuestButton:
+                board = importantBoard;
+                break;
+            default:
+                board = null;
+        }
+        try {
+            board.addQuest(quest);
+            questInput.setText("");
+        } catch (NullPointerException exception) {
+            Log.e(TAG, "Something other than the designated buttons tried to add a new quest.");
+            exception.printStackTrace();
+        }
 
-    public void addImportantQuest(View view) {
-        Quest quest = new Quest();
-        quest.info = questInput.getText().toString();
-        importantBoard.addQuest(quest);
     }
 }
