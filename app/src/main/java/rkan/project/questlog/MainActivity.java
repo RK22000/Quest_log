@@ -12,14 +12,16 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class MainActivity extends AppCompatActivity {
+    private QuestBoard importantBoard, urgentBoard;
+    private EditText questInput;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        TextInputEditText inputEditText = findViewById(R.id.questInputText);
-        inputEditText.addTextChangedListener(new TextWatcher() {
+        questInput = findViewById(R.id.questInputText);
+        questInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -41,5 +43,20 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        importantBoard  = findViewById(R.id.importantQuestBoard);
+        urgentBoard     = findViewById(R.id.urgentQuestBoard);
+    }
+
+    public void addUrgentQuest(View view) {
+        Quest quest = new Quest();
+        quest.info = questInput.getText().toString();
+        urgentBoard.addQuest(quest);
+    }
+
+    public void addImportantQuest(View view) {
+        Quest quest = new Quest();
+        quest.info = questInput.getText().toString();
+        importantBoard.addQuest(quest);
     }
 }

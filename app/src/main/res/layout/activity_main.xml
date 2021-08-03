@@ -8,6 +8,7 @@
     android:orientation="vertical">
 
     <rkan.project.questlog.QuestBoard
+        android:id="@+id/importantQuestBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -15,6 +16,7 @@
 
 
     <rkan.project.questlog.QuestBoard
+        android:id="@+id/urgentQuestBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -46,7 +48,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:text="Urgent" />
+                android:text="Urgent"
+                android:onClick="addUrgentQuest"/>
 
             <Button
                 android:id="@+id/importantQuestButton"
@@ -54,7 +57,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="4dp"
                 android:layout_weight="1"
-                android:text="Important" />
+                android:text="Important"
+                android:onClick="addImportantQuest"/>
         </LinearLayout>
     </com.google.android.material.textfield.TextInputLayout>
 
