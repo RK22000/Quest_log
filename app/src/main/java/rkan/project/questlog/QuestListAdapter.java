@@ -55,8 +55,8 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 quest.completed = isChecked;
                 if (isChecked) {
-                    quest.completionDate = new Date();
-                    Log.d(TAG, String.valueOf(quest.completionDate));
+                    quest.completionDate = new Date().getTime();
+                    Log.d(TAG, String.valueOf(quest.getCompletionDate()));
                 }
             }
         });
