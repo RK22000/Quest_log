@@ -1,6 +1,7 @@
 package rkan.project.questlog;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
@@ -11,27 +12,32 @@ public class Quest {
 
     @PrimaryKey(autoGenerate = true)
     public int questId;
-    public int getQuestId() {
+    /*public int getQuestId() {
         return questId;
-    }
+    }*/
 
     /**
      * Information on the quest
      */
     @NonNull
-    public String info;
+    public String   info;
+    public Type     questType;
+    public boolean  completed  = false;
+    public boolean  archived = false;
+    public long     completionDate;
+    public Date getCompletionDate() {
+        return new Date(completionDate);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        Quest other = (Quest) obj;
+        return questId == other.questId;
+    }
+
 
     public static enum Type {
         IMPORTANT,
         URGENT
-    }
-
-    public Type questType;
-
-    public boolean completed  = false;
-    public boolean archived = false;
-    public long completionDate;
-    public Date getCompletionDate() {
-        return new Date(completionDate);
     }
 }

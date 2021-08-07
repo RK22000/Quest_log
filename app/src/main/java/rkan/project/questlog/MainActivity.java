@@ -1,6 +1,8 @@
 package rkan.project.questlog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -12,10 +14,13 @@ import android.widget.EditText;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
     private String TAG = "MainActivity";
     private QuestBoard importantBoard, urgentBoard;
     private EditText questInput;
+    private QuestViewModel questViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +53,31 @@ public class MainActivity extends AppCompatActivity {
 
         importantBoard  = findViewById(R.id.importantQuestBoard);
         urgentBoard     = findViewById(R.id.urgentQuestBoard);
+
+        questViewModel = new ViewModelProvider(this).get(QuestViewModel.class);
+        questViewModel.getImportantQuests().observe(this, new Observer<List<Quest>>() {
+            @Override
+            public void onChanged(List<Quest> quests) {
+                importantBoard.submitQuests(quests);
+            }
+        });
+        questViewModel.getUrgentQuests().observe(this, new Observer<List<Quest>>() {
+            @Override
+            public void onChanged(List<Quest> quests) {
+                urgentBoard.submitQuests(quests);
+            }
+        });
+
+        QuestBoard.QuestCallback deleteQuestCallback = new QuestBoard.QuestCallback() {
+            @Override
+            public void call(Quest quest) {
+                questViewModel.deleteQuest(quest);
+            }
+        };
+
+        importantBoard.setDeleteQuestCallback(deleteQuestCallback);
+        urgentBoard.setDeleteQuestCallback(deleteQuestCallback);
+
     }
 
     public void addQuest(View view) {
@@ -56,14 +86,19 @@ public class MainActivity extends AppCompatActivity {
         QuestBoard board;
         switch (view.getId()) {
             case R.id.urgentQuestButton:
-                board = urgentBoard;
+                //board = urgentBoard;
+                quest.questType = Quest.Type.URGENT;
                 break;
             case R.id.importantQuestButton:
-                board = importantBoard;
+                //board = importantBoard;
+                quest.questType = Quest.Type.IMPORTANT;
                 break;
             default:
                 board = null;
         }
+        questViewModel.insert(quest);
+        questInput.setText("");
+        /*
         try {
             board.addQuest(quest);
             questInput.setText("");
@@ -71,6 +106,7 @@ public class MainActivity extends AppCompatActivity {
             Log.e(TAG, "Something other than the designated buttons tried to add a new quest.");
             exception.printStackTrace();
         }
+         */
 
     }
 }
