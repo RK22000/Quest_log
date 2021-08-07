@@ -18,9 +18,11 @@ import java.util.List;
 
 public class QuestAdapter extends RecyclerView.Adapter<QuestViewHolder>{
     List<Quest> quests = new ArrayList<Quest>();
+    QuestBoard.QuestCallback questUpdateCallback;
 
-    public void submitQuests(List<Quest> pQuests) {
+    public void submitQuests(List<Quest> pQuests, QuestBoard.QuestCallback pQuestUpdateCallback) {
         quests = pQuests;
+        questUpdateCallback = pQuestUpdateCallback;
         notifyDataSetChanged();
     }
     public List<Quest> getQuests() {
@@ -35,7 +37,7 @@ public class QuestAdapter extends RecyclerView.Adapter<QuestViewHolder>{
 
     @Override
     public void onBindViewHolder(@NonNull QuestViewHolder holder, int position) {
-        holder.setQuest(quests.get(position));
+        holder.setQuest(quests.get(position), questUpdateCallback);
     }
 
     @Override

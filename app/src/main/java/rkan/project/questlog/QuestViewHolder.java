@@ -21,9 +21,10 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
         questDisplay = itemView.findViewById(R.id.questInfoView);
     }
-    public void setQuest(Quest quest) {
+    public void setQuest(Quest quest, QuestBoard.QuestCallback questUpdateCallback) {
         Log.d(TAG, "Setting quest view " + quest.info + " id " + quest.questId);
         questDisplay.setText(quest.info);
+        questDisplay.setChecked(quest.completed);
         questDisplay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -32,6 +33,7 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
                     quest.completionDate = new Date().getTime();
                     Log.d(TAG, String.valueOf(quest.getCompletionDate()));
                 }
+                questUpdateCallback.call(quest);
             }
         });
     }

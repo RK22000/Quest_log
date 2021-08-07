@@ -55,16 +55,24 @@ public class MainActivity extends AppCompatActivity {
         urgentBoard     = findViewById(R.id.urgentQuestBoard);
 
         questViewModel = new ViewModelProvider(this).get(QuestViewModel.class);
+
+        QuestBoard.QuestCallback updateQuestCallback = new QuestBoard.QuestCallback() {
+            @Override
+            public void call(Quest quest) {
+                questViewModel.updateQuest(quest);
+            }
+        };
+
         questViewModel.getImportantQuests().observe(this, new Observer<List<Quest>>() {
             @Override
             public void onChanged(List<Quest> quests) {
-                importantBoard.submitQuests(quests);
+                importantBoard.submitQuests(quests, updateQuestCallback);
             }
         });
         questViewModel.getUrgentQuests().observe(this, new Observer<List<Quest>>() {
             @Override
             public void onChanged(List<Quest> quests) {
-                urgentBoard.submitQuests(quests);
+                urgentBoard.submitQuests(quests, updateQuestCallback);
             }
         });
 
@@ -83,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     public void addQuest(View view) {
         Quest quest = new Quest();
         quest.info = questInput.getText().toString();
-        QuestBoard board;
         switch (view.getId()) {
             case R.id.urgentQuestButton:
                 //board = urgentBoard;
@@ -94,19 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 quest.questType = Quest.Type.IMPORTANT;
                 break;
             default:
-                board = null;
+                Log.w(TAG, "Something other than the two add quest buttons tried to add a quest");
+                return;
         }
         questViewModel.insert(quest);
         questInput.setText("");
-        /*
-        try {
-            board.addQuest(quest);
-            questInput.setText("");
-        } catch (NullPointerException exception) {
-            Log.e(TAG, "Something other than the designated buttons tried to add a new quest.");
-            exception.printStackTrace();
-        }
-         */
-
     }
 }

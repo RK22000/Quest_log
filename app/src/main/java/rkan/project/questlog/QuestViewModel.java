@@ -35,4 +35,8 @@ public class QuestViewModel extends AndroidViewModel {
     public void deleteQuest(Quest quest) {
         repository.deleteQuest(quest);
     }
+
+    public void updateQuest(Quest quest) {
+        repository.updateQuest(quest);
+    }
 }

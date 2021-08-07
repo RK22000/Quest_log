@@ -37,4 +37,10 @@ public class QuestRepository {
             questDao.deleteQuest(quest);
         });
     }
+
+    public void updateQuest(Quest quest) {
+        QuestRoomDatabase.databaseWriteExecutor.execute(() -> {
+            questDao.updateQuest(quest);
+        });
+    }
 }

@@ -24,7 +24,7 @@ public class Quest {
     public Type     questType;
     public boolean  completed  = false;
     public boolean  archived = false;
-    public long     completionDate;
+    public long     completionDate; // TODO: refactor completionDate to completionTime
     public Date getCompletionDate() {
         return new Date(completionDate);
     }

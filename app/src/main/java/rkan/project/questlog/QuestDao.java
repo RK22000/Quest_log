@@ -6,6 +6,7 @@ import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface QuestDao {
     void deleteQuest(Quest quest);
     @Query("Select * from quest_table where questType = :type")
     LiveData<List<Quest>> getQuests(Quest.Type type);
+    @Update
+    public void updateQuest(Quest quest);
 }

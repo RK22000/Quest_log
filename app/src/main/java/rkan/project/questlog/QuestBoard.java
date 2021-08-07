@@ -28,9 +28,7 @@ public class QuestBoard extends RelativeLayout {
         super(context, attrs);
         inflate(context, R.layout.quest_board, this);
 
-        /*
-         * Set QuestBoard View attributes
-         */
+        //Set QuestBoard View attributes
         {
             TypedArray attributes = context.obtainStyledAttributes(
                     attrs,
@@ -46,9 +44,7 @@ public class QuestBoard extends RelativeLayout {
             }
         }
 
-        /*
-         * Set up the recycler view
-         */
+        //Set up the recycler view
         {
             questRecycler = findViewById(R.id.questListView);
             questRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -79,8 +75,8 @@ public class QuestBoard extends RelativeLayout {
 
     }
 
-    public void submitQuests(List<Quest> pQuests) {
-        questAdapter.submitQuests(pQuests);
+    public void submitQuests(List<Quest> pQuests, QuestCallback pQuestUpdateCallback) {
+        questAdapter.submitQuests(pQuests, pQuestUpdateCallback);
     }
 
     public void deleteQuest(Quest quest){
