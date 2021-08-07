@@ -12,14 +12,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class QuestAdapter extends RecyclerView.Adapter<QuestViewHolder>{
-    List<Quest> quests;
-    QuestAdapter(List<Quest> pQuests) {
-        quests = pQuests;
-    }
+    List<Quest> quests = new ArrayList<Quest>();
 
     public void submitQuests(List<Quest> pQuests) {
         quests = pQuests;

@@ -22,8 +22,6 @@ public class QuestBoard extends RelativeLayout {
     private String title;
     private RecyclerView questRecycler;
     private QuestAdapter questAdapter;
-    //final QuestListAdapter adapter;
-    private ArrayList<Quest> quests;
     private QuestCallback deleteQuestCallback;
 
     public QuestBoard(Context context, AttributeSet attrs) {
@@ -52,10 +50,9 @@ public class QuestBoard extends RelativeLayout {
          * Set up the recycler view
          */
         {
-            quests = new ArrayList<>();
             questRecycler = findViewById(R.id.questListView);
             questRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-            questAdapter = new QuestAdapter(quests);
+            questAdapter = new QuestAdapter();
             questRecycler.setAdapter(questAdapter);
             //adapter = new QuestListAdapter(new QuestListAdapter.QuestDiff());
             //questRecycler.setAdapter(adapter);
@@ -86,13 +83,6 @@ public class QuestBoard extends RelativeLayout {
         questAdapter.submitQuests(pQuests);
     }
 
-    public void addQuest(Quest quest) {
-        Log.d(TAG, "Adding Quest. Current length = " + quests.size());
-        quests.add(quest);
-        //adapter.submitList(quests);
-        questAdapter.notifyDataSetChanged();
-    }
-
     public void deleteQuest(Quest quest){
         //quests.remove(quest);
         //questAdapter.notifyDataSetChanged();
@@ -108,7 +98,7 @@ public class QuestBoard extends RelativeLayout {
         deleteQuestCallback = pDeleteQuestCallback;
     }
 
-    public static interface QuestCallback {
+    public interface QuestCallback {
         void call(Quest quest);
     }
 
