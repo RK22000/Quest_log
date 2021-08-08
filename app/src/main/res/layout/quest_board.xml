@@ -17,7 +17,8 @@
         app:layout_constraintEnd_toEndOf="@+id/questBoardTitle"
         app:layout_constraintStart_toStartOf="@+id/questBoardTitle"
         app:layout_constraintTop_toTopOf="@+id/questBoardTitle"
-        app:srcCompat="@drawable/wooden_plank" />
+        app:srcCompat="@drawable/wooden_plank"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/questBoardTitle"
@@ -26,7 +27,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:backgroundTint="@color/brown_dark_1_trasn_1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,10 +37,10 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/questListView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_below="@id/questBoardTitle"
-        app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:layout_editor_absoluteX="0dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
