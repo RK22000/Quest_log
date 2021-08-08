@@ -1,6 +1,9 @@
 package rkan.project.questlog;
 
 
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.StrikethroughSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +30,27 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
         Log.d(TAG, "Setting quest view " + quest.info + " id " + quest.questId);
         questDisplay.setText(quest.info);
         questDisplay.setChecked(quest.completed);
+        if (quest.completed) {
+            quest.completionDate = new Date().getTime();
+            SpannableString strickedinfo = new SpannableString(quest.info);
+            strickedinfo.setSpan(new StrikethroughSpan(), 0, quest.info.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            questDisplay.setText(strickedinfo);
+        }
         questDisplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 quest.completed = !quest.completed;
+                /*
+                questDisplay.setChecked(quest.completed);
                 if (quest.completed) {
                     quest.completionDate = new Date().getTime();
+                    SpannableString strickedinfo = new SpannableString(quest.info);
+                    strickedinfo.setSpan(new StrikethroughSpan(), 0, quest.info.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    questDisplay.setText(strickedinfo);
                 }
-                questDisplay.setChecked(quest.completed);
                 Log.d(TAG, String.valueOf(quest.getCompletionDate()));
+
+                 */
                 questUpdateCallback.call(quest);
             }
         });

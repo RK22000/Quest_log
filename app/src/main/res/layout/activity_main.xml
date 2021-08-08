@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:background="@drawable/woodenboard"
+    android:background="@drawable/wooden_wall_portrait"
     android:padding="2dp">
 
     <rkan.project.questlog.QuestBoard
@@ -41,7 +41,8 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/questInputText"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:inputType="textCapSentences"/>
 
         <LinearLayout
             android:id="@+id/questButtonLayout"
