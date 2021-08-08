@@ -5,42 +5,37 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="-60dp"
-        android:layout_marginTop="-10dp"
-        android:layout_marginEnd="-60dp"
-        android:layout_marginBottom="-10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/questBoardTitle"
-        app:layout_constraintEnd_toEndOf="@+id/questBoardTitle"
-        app:layout_constraintStart_toStartOf="@+id/questBoardTitle"
-        app:layout_constraintTop_toTopOf="@+id/questBoardTitle"
-        app:srcCompat="@drawable/wooden_plank"
-        tools:ignore="ContentDescription" />
 
-    <TextView
-        android:id="@+id/questBoardTitle"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/title_board_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:backgroundTint="@color/brown_dark_1_trasn_1"
-        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Place Holder" />
+        android:background="@drawable/wooden_plank"
+        android:padding="10dp">
+
+        <TextView
+            android:id="@+id/questBoardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/brown_dark_1_trasn_1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Place Holder" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/questListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@id/questBoardTitle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/title_board_layout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
