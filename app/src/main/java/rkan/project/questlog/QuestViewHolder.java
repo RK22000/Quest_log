@@ -31,7 +31,9 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 quest.completed = !quest.completed;
-                quest.completionDate = new Date().getTime();
+                if (quest.completed) {
+                    quest.completionDate = new Date().getTime();
+                }
                 questDisplay.setChecked(quest.completed);
                 Log.d(TAG, String.valueOf(quest.getCompletionDate()));
                 questUpdateCallback.call(quest);
