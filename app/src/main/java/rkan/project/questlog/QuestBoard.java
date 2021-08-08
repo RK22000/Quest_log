@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ public class QuestBoard extends RelativeLayout {
     private RecyclerView questRecycler;
     private QuestAdapter questAdapter;
     private QuestCallback deleteQuestCallback;
+    private QuestCallback addRequestCallback;
 
     public QuestBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -39,6 +42,21 @@ public class QuestBoard extends RelativeLayout {
                 Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
                 TextView titleView = findViewById(R.id.questBoardTitle);
                 titleView.setText(title);
+                titleView.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String  important   = getResources().getString(R.string.important),
+                                urgent      = getResources().getString(R.string.urgent);
+
+                        Quest newQuest = new Quest();
+                        if (title.equals(important)) {
+                            newQuest.questType = Quest.Type.IMPORTANT;
+                        } else if (title.equals(urgent)) {
+                            newQuest.questType = Quest.Type.URGENT;
+                        } else return;
+                        addRequestCallback.call(newQuest);
+                    }
+                });
             } finally {
                 attributes.recycle();
             }
@@ -48,6 +66,7 @@ public class QuestBoard extends RelativeLayout {
         {
             questRecycler = findViewById(R.id.questListView);
             questRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+            //questRecycler.setLayoutManager(new StaggeredGridLayoutMan);
             questAdapter = new QuestAdapter();
             questRecycler.setAdapter(questAdapter);
             //adapter = new QuestListAdapter(new QuestListAdapter.QuestDiff());
@@ -73,6 +92,7 @@ public class QuestBoard extends RelativeLayout {
             touchHelper.attachToRecyclerView(questRecycler);
         }
 
+
     }
 
     public void submitQuests(List<Quest> pQuests, QuestCallback pQuestUpdateCallback) {
@@ -92,6 +112,11 @@ public class QuestBoard extends RelativeLayout {
 
     public void setDeleteQuestCallback(QuestCallback pDeleteQuestCallback) {
         deleteQuestCallback = pDeleteQuestCallback;
+    }
+
+
+    public void setAddRequestCallback(QuestCallback pAddRequestCallback) {
+        addRequestCallback = pAddRequestCallback;
     }
 
     public interface QuestCallback {

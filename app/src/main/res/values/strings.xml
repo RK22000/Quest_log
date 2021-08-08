@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Quest log</string>
+    <string name="important">Important</string>
+    <string name="urgent">Urgent</string>
+    <string name="generic_quest_board_title">Quest Board</string>
 </resources>

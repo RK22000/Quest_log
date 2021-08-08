@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         questInput = findViewById(R.id.questInputText);
+        /*
         questInput.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -50,6 +51,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+         */
 
         importantBoard  = findViewById(R.id.importantQuestBoard);
         urgentBoard     = findViewById(R.id.urgentQuestBoard);
@@ -86,6 +89,20 @@ public class MainActivity extends AppCompatActivity {
         importantBoard.setDeleteQuestCallback(deleteQuestCallback);
         urgentBoard.setDeleteQuestCallback(deleteQuestCallback);
 
+        QuestBoard.QuestCallback addRequestCallback = new QuestBoard.QuestCallback() {
+            @Override
+            public void call(Quest quest) {
+                quest.info = questInput.getText().toString();
+                if (quest.info.equals("")) {
+                    return;
+                }
+                questViewModel.insert(quest);
+                questInput.setText("");
+            }
+        };
+        importantBoard.setAddRequestCallback(addRequestCallback);
+        urgentBoard.setAddRequestCallback(addRequestCallback);
+
     }
 
     public void addQuest(View view) {
@@ -106,5 +123,15 @@ public class MainActivity extends AppCompatActivity {
         }
         questViewModel.insert(quest);
         questInput.setText("");
+    }
+
+    @Override
+    public void onBackPressed() {
+        View view = getCurrentFocus();
+        if (view != null) {
+            view.clearFocus();
+            return;
+        }
+        super.onBackPressed();
     }
 }

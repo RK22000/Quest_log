@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="WoodenQuestBoard">
+        <item name="android:background">@drawable/wooden_board</item>
+        <item name="android:padding">15dp</item>
+        <item name="boardTitle">@string/generic_quest_board_title</item>
+    </style>
+</resources>
