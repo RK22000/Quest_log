@@ -15,8 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:layout_weight="1"
-        android:background="@drawable/wooden_board"
-        android:padding="15dp"
+        style="@style/WoodenQuestBoard"
         app:boardTitle="@string/important" />
 
 
