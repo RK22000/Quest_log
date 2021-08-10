@@ -39,7 +39,6 @@ public class QuestBoard extends RelativeLayout {
 
             try {
                 title = attributes.getString(R.styleable.QuestBoard_boardTitle);
-                Toast.makeText(context, title, Toast.LENGTH_SHORT).show();
                 TextView titleView = findViewById(R.id.questBoardTitle);
                 titleView.setText(title);
                 titleView.setOnClickListener(new OnClickListener() {

@@ -15,7 +15,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:layout_weight="1"
-        style="@style/WoodenQuestBoard"
         app:boardTitle="@string/important" />
 
 
@@ -25,7 +24,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="2dp"
         android:layout_weight="1"
-        style="@style/WoodenQuestBoard"
         app:boardTitle="@string/urgent" />
 
 
