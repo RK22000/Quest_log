@@ -6,9 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity"
     android:orientation="vertical"
-    android:background="@drawable/wooden_wall_portrait"
-    android:padding="2dp">
+    >
 
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/guild_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <!--
     <rkan.project.questlog.QuestBoard
         android:id="@+id/importantQuestBoard"
         android:layout_width="match_parent"
@@ -68,6 +72,7 @@
                 android:onClick="addQuest"/>
         </LinearLayout>
     </com.google.android.material.textfield.TextInputLayout>
+    -->
 
 
 </LinearLayout>

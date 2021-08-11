@@ -3,4 +3,6 @@
     <string name="important">Important</string>
     <string name="urgent">Urgent</string>
     <string name="generic_quest_board_title">Quest Board</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

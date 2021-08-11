@@ -3,6 +3,7 @@ package rkan.project.questlog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -27,33 +28,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        questInput = findViewById(R.id.questInputText);
+        ViewPager2 guildPager = findViewById(R.id.guild_pager);
+        guildPager.setAdapter(new GuildPagerAdapter(getSupportFragmentManager(), getLifecycle()));
+
+
         /*
-        questInput.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                View layout = findViewById(R.id.questButtonLayout);
-                if (s.length() == 0) {
-                    layout.setVisibility(View.GONE);
-                } else {
-                    layout.setVisibility(View.VISIBLE);
-                }
-
-            }
-        });
-
-         */
-
+        questInput = findViewById(R.id.questInputText);
         importantBoard  = findViewById(R.id.importantQuestBoard);
         urgentBoard     = findViewById(R.id.urgentQuestBoard);
 
@@ -102,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
         };
         importantBoard.setAddRequestCallback(addRequestCallback);
         urgentBoard.setAddRequestCallback(addRequestCallback);
+
+         */
+
 
     }
 
