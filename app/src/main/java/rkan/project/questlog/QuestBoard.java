@@ -56,6 +56,8 @@ public class QuestBoard extends RelativeLayout {
                         addRequestCallback.call(newQuest);
                     }
                 });
+            } catch (Exception e) {
+                e.printStackTrace();
             } finally {
                 attributes.recycle();
             }

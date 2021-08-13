@@ -1,6 +1,7 @@
 package rkan.project.questlog;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
@@ -15,7 +16,9 @@ import android.widget.EditText;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = "MainActivity";
@@ -27,6 +30,29 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        questViewModel = new ViewModelProvider(this).get(QuestViewModel.class);
+
+        LiveData<List<Quest>> LD = questViewModel.getCompletedQuests();
+        List<Quest> completedQuests = LD.getValue();
+        LD.observe(this, new Observer<List<Quest>>() {
+            @Override
+            public void onChanged(List<Quest> quests) {
+
+                for (Quest q :
+                        quests) { //TODO this may cause a null pointer error
+                    if (diffInDays(new Date(), q.getCompletionDate()) >= 1) {
+                        Log.d(TAG, "Archiving a quest " + q.info);
+                        q.archived = true;
+                        questViewModel.updateQuest(q);
+                    }
+                }
+                LD.removeObserver(this);
+            }
+        });
+        if (completedQuests != null) {
+            Log.d(TAG, "checking completed quests");
+        }
 
         ViewPager2 guildPager = findViewById(R.id.guild_pager);
         guildPager.setAdapter(new GuildPagerAdapter(getSupportFragmentManager(), getLifecycle()));
@@ -86,6 +112,10 @@ public class MainActivity extends AppCompatActivity {
          */
 
 
+    }
+
+    public long diffInDays(Date d1, Date d2) {
+        return TimeUnit.DAYS.convert(d1.getTime() - d2.getTime(), TimeUnit.MILLISECONDS);
     }
 
     public void addQuest(View view) {

@@ -31,7 +31,6 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
         questDisplay.setText(quest.info);
         questDisplay.setChecked(quest.completed);
         if (quest.completed) {
-            quest.completionDate = new Date().getTime();
             SpannableString strickedinfo = new SpannableString(quest.info);
             strickedinfo.setSpan(new StrikethroughSpan(), 0, quest.info.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             questDisplay.setText(strickedinfo);
@@ -40,6 +39,7 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onClick(View v) {
                 quest.completed = !quest.completed;
+                quest.completionDate = new Date().getTime();
                 /*
                 questDisplay.setChecked(quest.completed);
                 if (quest.completed) {

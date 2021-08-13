@@ -16,8 +16,12 @@ public interface QuestDao {
     void insertQuest(Quest quest);
     @Delete
     void deleteQuest(Quest quest);
-    @Query("Select * from quest_table where questType = :type")
+    @Query("Select * from quest_table where questType = :type and archived = 0")
     LiveData<List<Quest>> getQuests(Quest.Type type);
     @Update
     public void updateQuest(Quest quest);
+    @Query("Select * from quest_table where not archived = 0 order by completionDate desc")
+    LiveData<List<Quest>> getArchivedQuests();
+    @Query("Select * from quest_table where not completed = 0 and archived = 0")
+    LiveData<List<Quest>> getCompletedQuests();
 }

@@ -2,11 +2,17 @@ package rkan.project.questlog;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -40,5 +46,20 @@ public class GuildArchiveFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_guild_archive, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        QuestBoard archiveBoard = view.findViewById(R.id.archive_board);
+        QuestViewModel questViewModel = new ViewModelProvider(this).get(QuestViewModel.class);
+
+        questViewModel.getArchivedQuests().observe(getViewLifecycleOwner(), new Observer<List<Quest>>() {
+            @Override
+            public void onChanged(List<Quest> quests) {
+                archiveBoard.submitQuests(quests, null);
+            }
+        });
     }
 }

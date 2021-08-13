@@ -3,14 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".GuildArchiveFragment"
     android:background="@drawable/wooden_wall_portrait"
     android:padding="2dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <rkan.project.questlog.QuestBoard
+        android:id="@+id/archive_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        app:boardTitle="Archives"
+        android:layout_margin="2dp"/>
 
 </FrameLayout>
