@@ -24,6 +24,7 @@ public class QuestBoard extends RelativeLayout {
     private String title;
     private RecyclerView questRecycler;
     private QuestAdapter questAdapter;
+    private ItemTouchHelper touchHelper;
     private QuestCallback deleteQuestCallback;
     private QuestCallback addRequestCallback;
 
@@ -73,9 +74,9 @@ public class QuestBoard extends RelativeLayout {
             //adapter = new QuestListAdapter(new QuestListAdapter.QuestDiff());
             //questRecycler.setAdapter(adapter);
 
-            ItemTouchHelper touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
+            touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                     0
-                    , ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT
+                    , ItemTouchHelper.RIGHT
             ) {
                 @Override
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
@@ -90,7 +91,6 @@ public class QuestBoard extends RelativeLayout {
                     //adapter.submitList(quests);
                 }
             });
-            touchHelper.attachToRecyclerView(questRecycler);
         }
 
 
@@ -113,6 +113,7 @@ public class QuestBoard extends RelativeLayout {
 
     public void setDeleteQuestCallback(QuestCallback pDeleteQuestCallback) {
         deleteQuestCallback = pDeleteQuestCallback;
+        touchHelper.attachToRecyclerView(questRecycler);
     }
 
 

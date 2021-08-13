@@ -20,7 +20,7 @@ public interface QuestDao {
     LiveData<List<Quest>> getQuests(Quest.Type type);
     @Update
     public void updateQuest(Quest quest);
-    @Query("Select * from quest_table where not archived = 0 order by completionDate desc")
+    @Query("Select * from quest_table where not archived = 0 order by completionDate asc")
     LiveData<List<Quest>> getArchivedQuests();
     @Query("Select * from quest_table where not completed = 0 and archived = 0")
     LiveData<List<Quest>> getCompletedQuests();
