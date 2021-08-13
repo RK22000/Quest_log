@@ -35,11 +35,12 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
             strickedinfo.setSpan(new StrikethroughSpan(), 0, quest.info.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             questDisplay.setText(strickedinfo);
         }
-        questDisplay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                quest.completed = !quest.completed;
-                quest.completionDate = new Date().getTime();
+        if (questUpdateCallback != null) {
+            questDisplay.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    quest.completed = !quest.completed;
+                    quest.completionDate = new Date().getTime();
                 /*
                 questDisplay.setChecked(quest.completed);
                 if (quest.completed) {
@@ -51,9 +52,10 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
                 Log.d(TAG, String.valueOf(quest.getCompletionDate()));
 
                  */
-                questUpdateCallback.call(quest);
-            }
-        });
+                    questUpdateCallback.call(quest);
+                }
+            });
+        }
 
         /*
         questDisplay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
