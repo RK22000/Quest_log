@@ -2,6 +2,7 @@ package rkan.project.questlog;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -25,7 +26,7 @@ public class QuestBoard extends RelativeLayout {
     private RecyclerView questRecycler;
     private QuestAdapter questAdapter;
     private ItemTouchHelper touchHelper;
-    private QuestCallback deleteQuestCallback;
+    private QuestCallback deleteQuestCallback, updateQuestCallback;
     private QuestCallback addRequestCallback;
 
     public QuestBoard(Context context, AttributeSet attrs) {
@@ -49,6 +50,7 @@ public class QuestBoard extends RelativeLayout {
                                 urgent      = getResources().getString(R.string.urgent);
 
                         Quest newQuest = new Quest();
+                        newQuest.weight = questAdapter.getQuests().size();
                         if (title.equals(important)) {
                             newQuest.questType = Quest.Type.IMPORTANT;
                         } else if (title.equals(urgent)) {
@@ -75,13 +77,23 @@ public class QuestBoard extends RelativeLayout {
             //questRecycler.setAdapter(adapter);
 
             touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
-                    0
+                    ItemTouchHelper.UP | ItemTouchHelper.DOWN
                     , ItemTouchHelper.RIGHT
             ) {
                 @Override
                 public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-                    return false;
+                    int origin = viewHolder.getAdapterPosition(), destination = target.getAdapterPosition();
+                    Quest qO = questAdapter.getQuests().get(origin), qD = questAdapter.getQuests().get(destination);
+                    int t       = qO.weight;
+                    qO.weight   = qD.weight;
+                    qD.weight   = t;
+                    updateQuestCallback.call(qD, qO);
+                    questAdapter.notifyItemMoved(origin, destination);
+                    return true;
                 }
+
+
+
 
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
@@ -89,6 +101,15 @@ public class QuestBoard extends RelativeLayout {
                     //quests.remove(viewHolder.getAdapterPosition());
                     //questAdapter.notifyDataSetChanged();
                     //adapter.submitList(quests);
+                }
+
+                @Override
+                public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
+                        float alpha = 1 - (Math.abs(dX) / recyclerView.getWidth());
+                        viewHolder.itemView.setAlpha(alpha);
+                    }
+                    super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
             });
         }
@@ -98,6 +119,7 @@ public class QuestBoard extends RelativeLayout {
 
     public void submitQuests(List<Quest> pQuests, QuestCallback pQuestUpdateCallback) {
         questAdapter.submitQuests(pQuests, pQuestUpdateCallback);
+        updateQuestCallback = pQuestUpdateCallback;
     }
 
     public void deleteQuest(Quest quest){
@@ -122,7 +144,8 @@ public class QuestBoard extends RelativeLayout {
     }
 
     public interface QuestCallback {
-        void call(Quest quest);
+        void call(Quest... quest);
+        void call(List<Quest> quests);
     }
 
 

@@ -38,15 +38,20 @@ public class QuestViewModel extends AndroidViewModel {
         return archivedQuests;
     }
 
-    public void insert(Quest quest) {
+    public void insert(Quest... quest) {
         repository.insertQuest(quest);
     }
 
-    public void deleteQuest(Quest quest) {
+    public void deleteQuest(Quest... quest) {
         repository.deleteQuest(quest);
     }
 
-    public void updateQuest(Quest quest) {
+    public void updateQuest(Quest... quest) {
         repository.updateQuest(quest);
     }
+
+    public void updateQuests(List<Quest> quests) {
+        repository.updateQuests(quests);
+    }
+
 }

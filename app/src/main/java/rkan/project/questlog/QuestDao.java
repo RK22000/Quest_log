@@ -13,13 +13,15 @@ import java.util.List;
 @Dao
 public interface QuestDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    void insertQuest(Quest quest);
+    void insertQuest(Quest... quest);
     @Delete
-    void deleteQuest(Quest quest);
-    @Query("Select * from quest_table where questType = :type and archived = 0")
+    void deleteQuest(Quest... quest);
+    @Query("Select * from quest_table where questType = :type and archived = 0 order by weight asc")
     LiveData<List<Quest>> getQuests(Quest.Type type);
+    @Update(entity = Quest.class)
+    public void updateQuest(Quest... quest);
     @Update
-    public void updateQuest(Quest quest);
+    public void updateQuests(List<Quest> quests);
     @Query("Select * from quest_table where not archived = 0 order by completionDate asc")
     LiveData<List<Quest>> getArchivedQuests();
     @Query("Select * from quest_table where not completed = 0 and archived = 0")

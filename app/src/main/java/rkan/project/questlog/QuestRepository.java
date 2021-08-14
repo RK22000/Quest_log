@@ -36,21 +36,27 @@ public class QuestRepository {
         return archivedQuests;
     }
 
-    public void insertQuest(Quest quest) {
+    public void insertQuest(Quest... quest) {
         QuestRoomDatabase.databaseWriteExecutor.execute(() -> {
             questDao.insertQuest(quest);
         });
     }
 
-    public void deleteQuest(Quest quest) {
+    public void deleteQuest(Quest... quest) {
         QuestRoomDatabase.databaseWriteExecutor.execute(() -> {
             questDao.deleteQuest(quest);
         });
     }
 
-    public void updateQuest(Quest quest) {
+    public void updateQuest(Quest... quest) {
         QuestRoomDatabase.databaseWriteExecutor.execute(() -> {
             questDao.updateQuest(quest);
+        });
+    }
+
+    public void updateQuests(List<Quest> quests) {
+        QuestRoomDatabase.databaseWriteExecutor.execute(() -> {
+            questDao.updateQuests(quests);
         });
     }
 }

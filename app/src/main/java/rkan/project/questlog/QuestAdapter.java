@@ -21,9 +21,12 @@ public class QuestAdapter extends RecyclerView.Adapter<QuestViewHolder>{
     QuestBoard.QuestCallback questUpdateCallback;
 
     public void submitQuests(List<Quest> pQuests, QuestBoard.QuestCallback pQuestUpdateCallback) {
+        boolean addedOrDeleted = (quests.size() != pQuests.size());
         quests = pQuests;
         questUpdateCallback = pQuestUpdateCallback;
-        notifyDataSetChanged();
+        if (addedOrDeleted) {
+            notifyDataSetChanged();
+        }
     }
     public List<Quest> getQuests() {
         return quests;

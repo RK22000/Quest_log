@@ -28,6 +28,7 @@ public class Quest {
     public Date getCompletionDate() {
         return new Date(completionDate);
     }
+    public int      weight = 0;
 
     @Override
     public boolean equals(@Nullable Object obj) {

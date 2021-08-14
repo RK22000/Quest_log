@@ -66,8 +66,13 @@ public class GuildBoardFragment extends Fragment {
 
         QuestBoard.QuestCallback updateQuestCallback = new QuestBoard.QuestCallback() {
             @Override
-            public void call(Quest quest) {
+            public void call(Quest... quest) {
                 questViewModel.updateQuest(quest);
+            }
+
+            @Override
+            public void call(List<Quest> quests) {
+                questViewModel.updateQuests(quests);
             }
         };
 
@@ -86,8 +91,12 @@ public class GuildBoardFragment extends Fragment {
 
         QuestBoard.QuestCallback deleteQuestCallback = new QuestBoard.QuestCallback() {
             @Override
-            public void call(Quest quest) {
+            public void call(Quest... quest) {
                 questViewModel.deleteQuest(quest);
+            }
+
+            @Override
+            public void call(List<Quest> quests) {
             }
         };
 
@@ -96,13 +105,17 @@ public class GuildBoardFragment extends Fragment {
 
         QuestBoard.QuestCallback addRequestCallback = new QuestBoard.QuestCallback() {
             @Override
-            public void call(Quest quest) {
-                quest.info = questInput.getText().toString();
-                if (quest.info.equals("")) {
+            public void call(Quest... quest) {
+                quest[0].info = questInput.getText().toString();
+                if (quest[0].info.equals("")) {
                     return;
                 }
                 questViewModel.insert(quest);
                 questInput.setText("");
+            }
+
+            @Override
+            public void call(List<Quest> quests) {
             }
         };
         importantBoard.setAddRequestCallback(addRequestCallback);
