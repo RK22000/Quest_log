@@ -41,4 +41,14 @@ public class Quest {
         IMPORTANT,
         URGENT
     }
+
+    public static boolean areSame(Quest q1, Quest q2) {
+        return q1.questId == q2.questId &&
+                q1.info.equals(q2.info) &&
+                q1.questType == q2.questType &&
+                q1.completed == q2.completed &&
+                q1.archived == q2.archived &&
+                q1.completionDate == q2.completionDate &&
+                q1.weight == q2.weight;
+    }
 }

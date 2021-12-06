@@ -18,6 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class QuestBoard extends RelativeLayout {
@@ -87,8 +90,14 @@ public class QuestBoard extends RelativeLayout {
                     int t       = qO.weight;
                     qO.weight   = qD.weight;
                     qD.weight   = t;
-                    updateQuestCallback.call(qD, qO);
+                    Collections.sort(questAdapter.getQuests(), new Comparator<Quest>() {
+                        @Override
+                        public int compare(Quest o1, Quest o2) {
+                            return o1.weight-o2.weight;
+                        }
+                    });
                     questAdapter.notifyItemMoved(origin, destination);
+                    updateQuestCallback.call(qD, qO);
                     return true;
                 }
 

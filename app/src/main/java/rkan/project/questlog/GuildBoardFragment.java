@@ -68,16 +68,6 @@ public class GuildBoardFragment extends Fragment {
             @Override
             public void call(Quest... quest) {
                 questViewModel.updateQuest(quest);
-                for (Quest q :
-                        quest) {
-                    switch (q.questType) {
-                        case IMPORTANT:
-                            importantBoard.getQuestAdapter().notifyDataSetChanged();
-                            break;
-                        case URGENT:
-                            urgentBoard.getQuestAdapter().notifyDataSetChanged();
-                    }
-                }
             }
 
             @Override
@@ -86,18 +76,25 @@ public class GuildBoardFragment extends Fragment {
             }
         };
 
-        questViewModel.getImportantQuests().observe(getViewLifecycleOwner(), new Observer<List<Quest>>() {
+        Observer<List<Quest>> changeObserver = new Observer<List<Quest>>() {
             @Override
             public void onChanged(List<Quest> quests) {
+                List<Quest> q = importantBoard.getQuestAdapter().getQuests();
+                if (q.size() == quests.size()) {
+                    boolean same = true;
+                    for (int i = 0; i < q.size(); i++) {
+                        if (!Quest.areSame(q.get(i), quests.get(i))) {
+                            same = false;
+                            break;
+                        }
+                    }
+                    if (same) return;
+                }
                 importantBoard.submitQuests(quests, updateQuestCallback);
             }
-        });
-        questViewModel.getUrgentQuests().observe(getViewLifecycleOwner(), new Observer<List<Quest>>() {
-            @Override
-            public void onChanged(List<Quest> quests) {
-                urgentBoard.submitQuests(quests, updateQuestCallback);
-            }
-        });
+        };
+        questViewModel.getImportantQuests().observe(getViewLifecycleOwner(), changeObserver);
+        questViewModel.getUrgentQuests().observe(getViewLifecycleOwner(), changeObserver);
 
         QuestBoard.QuestCallback deleteQuestCallback = new QuestBoard.QuestCallback() {
             @Override
