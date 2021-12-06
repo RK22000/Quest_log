@@ -148,5 +148,9 @@ public class QuestBoard extends RelativeLayout {
         void call(List<Quest> quests);
     }
 
+    public QuestAdapter getQuestAdapter() {
+        return questAdapter;
+    }
+
 
 }

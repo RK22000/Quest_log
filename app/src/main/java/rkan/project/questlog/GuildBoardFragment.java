@@ -68,6 +68,16 @@ public class GuildBoardFragment extends Fragment {
             @Override
             public void call(Quest... quest) {
                 questViewModel.updateQuest(quest);
+                for (Quest q :
+                        quest) {
+                    switch (q.questType) {
+                        case IMPORTANT:
+                            importantBoard.getQuestAdapter().notifyDataSetChanged();
+                            break;
+                        case URGENT:
+                            urgentBoard.getQuestAdapter().notifyDataSetChanged();
+                    }
+                }
             }
 
             @Override
