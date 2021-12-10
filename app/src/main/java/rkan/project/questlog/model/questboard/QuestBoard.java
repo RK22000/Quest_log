@@ -31,6 +31,7 @@ public class QuestBoard extends RelativeLayout {
     private final QuestAdapter questAdapter;
     private QuestCallback addQuest, questUpdated, questDeleted;
     private final float DRAG_SCALE_FACTOR = 1.2f;
+    private final float DRAG_TRANSLATE_FACTOR = 1.2f;
 
     public QuestBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -101,15 +102,17 @@ public class QuestBoard extends RelativeLayout {
 
                 @Override
                 public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
                     if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                         float alpha = 1 - (Math.abs(dX) / recyclerView.getWidth());
-                        viewHolder.itemView.setAlpha(alpha);
+                        itemView.setAlpha(alpha);
                     } else if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {
                         if (isCurrentlyActive) {
-                            viewHolder.itemView.setScaleY(DRAG_SCALE_FACTOR);
-
+                            itemView.setScaleY(DRAG_SCALE_FACTOR);
                         }
-                        else viewHolder.itemView.setScaleY(1);
+                        else {
+                            itemView.setScaleY(1f);
+                        }
                     }
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
