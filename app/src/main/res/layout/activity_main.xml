@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
     <!--
-    <rkan.project.questlog.QuestBoard
+    <rkan.project.questlog.model.questboard.QuestBoard
         android:id="@+id/importantQuestBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,7 +22,7 @@
         app:boardTitle="@string/important" />
 
 
-    <rkan.project.questlog.QuestBoard
+    <rkan.project.questlog.model.questboard.QuestBoard
         android:id="@+id/urgentQuestBoard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -15,6 +15,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+import rkan.project.questlog.control.GuildPagerAdapter;
+import rkan.project.questlog.control.db_layer.QuestViewModel;
+import rkan.project.questlog.model.Quest;
+import rkan.project.questlog.model.questboard.QuestBoard;
+
 public class MainActivity extends AppCompatActivity {
     private String TAG = "MainActivity";
     private QuestBoard importantBoard, urgentBoard;

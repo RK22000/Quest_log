@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".GuildArchiveFragment"
+    tools:context=".control.GuildArchiveFragment"
     android:background="@drawable/wooden_wall_portrait"
     android:padding="2dp">
 
-    <rkan.project.questlog.QuestBoard
+    <rkan.project.questlog.model.questboard.QuestBoard
         android:id="@+id/archive_board"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
