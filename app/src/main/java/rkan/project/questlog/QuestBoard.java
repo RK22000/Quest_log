@@ -4,33 +4,34 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * A layout that has displays a list of Quests and a title for the List.
+ *
+ * This layout maintains its own list of quests but it allows callbacks to be
+ * set so that the actual list of quests can be synced with that of this layout's
+ * when the user interacts with the QuestBoard.
+ */
 public class QuestBoard extends RelativeLayout {
-    private final String TAG = "QuestBoard";
     private String title;
     private RecyclerView questRecycler;
     private QuestAdapter questAdapter;
     private ItemTouchHelper touchHelper;
-    private QuestCallback deleteQuestCallback, updateQuestCallback;
-    private QuestCallback addRequestCallback;
+    private QuestCallback updateQuestCallback;
+    private QuestCallback addQuest, questUpdated, questDeleted;
+    private float DRAG_SCALE_FACTOR = 1.2f;
 
     public QuestBoard(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -49,17 +50,9 @@ public class QuestBoard extends RelativeLayout {
                 titleView.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String  important   = getResources().getString(R.string.important),
-                                urgent      = getResources().getString(R.string.urgent);
-
-                        Quest newQuest = new Quest();
-                        newQuest.weight = questAdapter.getQuests().size();
-                        if (title.equals(important)) {
-                            newQuest.questType = Quest.Type.IMPORTANT;
-                        } else if (title.equals(urgent)) {
-                            newQuest.questType = Quest.Type.URGENT;
-                        } else return;
-                        addRequestCallback.call(newQuest);
+                        if (addQuest != null) {
+                            addQuest.call(new Quest());
+                        }
                     }
                 });
             } catch (Exception e) {
@@ -73,11 +66,8 @@ public class QuestBoard extends RelativeLayout {
         {
             questRecycler = findViewById(R.id.questListView);
             questRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-            //questRecycler.setLayoutManager(new StaggeredGridLayoutMan);
             questAdapter = new QuestAdapter();
             questRecycler.setAdapter(questAdapter);
-            //adapter = new QuestListAdapter(new QuestListAdapter.QuestDiff());
-            //questRecycler.setAdapter(adapter);
 
             touchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(
                     ItemTouchHelper.UP | ItemTouchHelper.DOWN
@@ -97,19 +87,17 @@ public class QuestBoard extends RelativeLayout {
                         }
                     });
                     questAdapter.notifyItemMoved(origin, destination);
-                    updateQuestCallback.call(qD, qO);
+                    if (questUpdated != null)
+                        questUpdated.call(qD, qO);
                     return true;
                 }
 
-
-
-
                 @Override
                 public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-                    deleteQuest(questAdapter.getQuests().get(viewHolder.getAdapterPosition()));
-                    //quests.remove(viewHolder.getAdapterPosition());
-                    //questAdapter.notifyDataSetChanged();
-                    //adapter.submitList(quests);
+                    Quest deletedQuest = questAdapter.getQuests().remove(viewHolder.getAdapterPosition());
+                    questAdapter.notifyItemRemoved(viewHolder.getAdapterPosition());
+                    if (questDeleted != null)
+                        questDeleted.call(deletedQuest);
                 }
 
                 @Override
@@ -121,45 +109,56 @@ public class QuestBoard extends RelativeLayout {
                     super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
                 }
             });
-        }
-
-
-    }
-
-    public void submitQuests(List<Quest> pQuests, QuestCallback pQuestUpdateCallback) {
-        questAdapter.submitQuests(pQuests, pQuestUpdateCallback);
-        updateQuestCallback = pQuestUpdateCallback;
-    }
-
-    public void deleteQuest(Quest quest){
-        //quests.remove(quest);
-        //questAdapter.notifyDataSetChanged();
-        try {
-            deleteQuestCallback.call(quest);
-        } catch (NullPointerException e) {
-            Log.e(TAG, "Tried to call deleteQuestCallback, but it was set to null");
-            e.printStackTrace();
+            touchHelper.attachToRecyclerView(questRecycler);
         }
     }
 
-    public void setDeleteQuestCallback(QuestCallback pDeleteQuestCallback) {
-        deleteQuestCallback = pDeleteQuestCallback;
-        touchHelper.attachToRecyclerView(questRecycler);
-    }
-
-
-    public void setAddRequestCallback(QuestCallback pAddRequestCallback) {
-        addRequestCallback = pAddRequestCallback;
-    }
-
+    @FunctionalInterface
     public interface QuestCallback {
-        void call(Quest... quest);
-        void call(List<Quest> quests);
+        void call(Quest... quests);
     }
 
     public QuestAdapter getQuestAdapter() {
         return questAdapter;
     }
 
+    public void addQuests(Quest... quests) {
+        if (quests == null) return;
+        for (Quest quest : quests) {
+            if (questAdapter.getQuests().size() == 0) quest.weight = 0;
+            else quest.weight = 1+questAdapter.getQuests().get(questAdapter.getQuests().size()-1).weight;
+            questAdapter.getQuests().add(quest);
+            questAdapter.notifyItemInserted(questAdapter.getQuests().size()-1);
+        }
+    }
+    /**
+     * Set callback to call when a new quest is added
+     * @param qc is the QuestCallback that will be called with the newly added Quest
+     */
+    public void onQuestAdded(QuestCallback qc){
+        addQuest = qc;
+    }
 
+    /**
+     * Set callback to call after a quest is updated
+     */
+    public void onQuestUpdated(QuestCallback qc){
+        questUpdated = qc;
+        questAdapter.onQuestUpdated(questUpdated);
+    }
+
+    /**
+     * Set callback to call after a quest is deleted
+     */
+    public void onQuestDeleted(QuestCallback qc){
+        questDeleted = qc;
+    }
+
+    /**
+     * Set the list of Quests for the QuestBoard
+     * @param quests
+     */
+    public void setQuests(List<Quest> quests){
+        questAdapter.setQuests(quests);
+    }
 }

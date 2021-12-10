@@ -1,16 +1,15 @@
 package rkan.project.questlog;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -58,8 +57,10 @@ public class GuildArchiveFragment extends Fragment {
         questViewModel.getArchivedQuests().observe(getViewLifecycleOwner(), new Observer<List<Quest>>() {
             @Override
             public void onChanged(List<Quest> quests) {
-                archiveBoard.submitQuests(quests, null);
+                archiveBoard.setQuests(quests);
             }
         });
+
+        archiveBoard.onQuestDeleted(questViewModel::deleteQuest);
     }
 }

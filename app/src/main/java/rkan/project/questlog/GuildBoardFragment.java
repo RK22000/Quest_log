@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,12 +50,12 @@ public class GuildBoardFragment extends Fragment {
         return inflater.inflate(R.layout.fragment_guild_board, container, false);
     }
 
+    private EditText questInput;
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
         QuestBoard importantBoard, urgentBoard;
-        EditText questInput;
         QuestViewModel questViewModel;
 
         questInput = view.findViewById(R.id.questInputText);
@@ -64,68 +65,66 @@ public class GuildBoardFragment extends Fragment {
 
         questViewModel = new ViewModelProvider(this).get(QuestViewModel.class);
 
-        QuestBoard.QuestCallback updateQuestCallback = new QuestBoard.QuestCallback() {
-            @Override
-            public void call(Quest... quest) {
-                questViewModel.updateQuest(quest);
-            }
+        importantBoard.onQuestAdded(quests -> {
+            Quest quest = getInputQuest();
+            if (quest == null) return;
+            quest.questType = Quest.Type.IMPORTANT;
+            importantBoard.addQuests(quest);
+            questInput.setText("");
+            questViewModel.insert(quest);
+        });
+        importantBoard.onQuestUpdated(questViewModel::updateQuest); // This is called a method reference
+        importantBoard.onQuestDeleted(questViewModel::deleteQuest);
 
-            @Override
-            public void call(List<Quest> quests) {
-                questViewModel.updateQuests(quests);
-            }
-        };
+        urgentBoard.onQuestAdded(quests -> {
+            Quest quest = getInputQuest();
+            if (quest == null) return;
+            quest.questType = Quest.Type.URGENT;
+            urgentBoard.addQuests(quest);
+            questInput.setText("");
+            questViewModel.insert(quest);
+        });
+        urgentBoard.onQuestUpdated(questViewModel::updateQuest);
+        urgentBoard.onQuestDeleted(questViewModel::deleteQuest);
 
-        Observer<List<Quest>> changeObserver = new Observer<List<Quest>>() {
-            @Override
-            public void onChanged(List<Quest> quests) {
-                List<Quest> q = importantBoard.getQuestAdapter().getQuests();
-                if (q.size() == quests.size()) {
-                    boolean same = true;
-                    for (int i = 0; i < q.size(); i++) {
-                        if (!Quest.areSame(q.get(i), quests.get(i))) {
-                            same = false;
-                            break;
-                        }
-                    }
-                    if (same) return;
+        questViewModel.getImportantQuests().observe(getViewLifecycleOwner(), quests -> {
+            Log.d("ImportantQuest Observer", "Important quests changed");
+            if (!isSameQuestList(quests, importantBoard.getQuestAdapter().quests))
+                importantBoard.setQuests(quests);
+        });
+        questViewModel.getUrgentQuests().observe(getViewLifecycleOwner(), quests ->{
+            Log.d("UrgentQuest Observer", "Urgent quests changed");
+            if(!isSameQuestList(quests, urgentBoard.getQuestAdapter().quests))
+                urgentBoard.setQuests(quests);
+        });
+
+    }
+
+    private Quest getInputQuest() {
+        if(questInput.getText().toString().equals("")) return null;
+        Quest quest = new Quest();
+        quest.info = questInput.getText().toString();
+        return  quest;
+    }
+
+    /**
+     * Helper method to check if 2 List of Quests match each other
+     * @param q1 is the first List of Quests
+     * @param q2 is the second List of Quests
+     * @return true if both lists are the same
+     */
+    public boolean isSameQuestList(List<Quest> q1, List<Quest> q2) {
+        boolean same = false;
+        if (q1.size() == q2.size()) {
+            same = true;
+            for (int i = 0; i < q1.size(); i++) {
+                if (!Quest.areSame(q1.get(i), q2.get(i))) {
+                    same = false;
+                    break;
                 }
-                importantBoard.submitQuests(quests, updateQuestCallback);
             }
-        };
-        questViewModel.getImportantQuests().observe(getViewLifecycleOwner(), changeObserver);
-        questViewModel.getUrgentQuests().observe(getViewLifecycleOwner(), changeObserver);
-
-        QuestBoard.QuestCallback deleteQuestCallback = new QuestBoard.QuestCallback() {
-            @Override
-            public void call(Quest... quest) {
-                questViewModel.deleteQuest(quest);
-            }
-
-            @Override
-            public void call(List<Quest> quests) {
-            }
-        };
-
-        importantBoard.setDeleteQuestCallback(deleteQuestCallback);
-        urgentBoard.setDeleteQuestCallback(deleteQuestCallback);
-
-        QuestBoard.QuestCallback addRequestCallback = new QuestBoard.QuestCallback() {
-            @Override
-            public void call(Quest... quest) {
-                quest[0].info = questInput.getText().toString();
-                if (quest[0].info.equals("")) {
-                    return;
-                }
-                questViewModel.insert(quest);
-                questInput.setText("");
-            }
-
-            @Override
-            public void call(List<Quest> quests) {
-            }
-        };
-        importantBoard.setAddRequestCallback(addRequestCallback);
-        urgentBoard.setAddRequestCallback(addRequestCallback);
+        }
+        Log.d("isSameQuestList", same+"");
+        return same;
     }
 }

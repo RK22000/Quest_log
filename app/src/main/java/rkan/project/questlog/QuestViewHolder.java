@@ -19,7 +19,6 @@ import java.util.Date;
 
 class QuestViewHolder extends RecyclerView.ViewHolder {
     private final String TAG = "QuestViewHolder";
-    //private Quest quest;
     private CheckBox questDisplay;
     public QuestViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -39,38 +38,15 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
             questDisplay.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d(TAG, "Clicked " + quest.info + " id " + quest.questId);
                     quest.completed = !quest.completed;
                     quest.completionDate = new Date().getTime();
-                /*
-                questDisplay.setChecked(quest.completed);
-                if (quest.completed) {
-                    quest.completionDate = new Date().getTime();
-                    SpannableString strickedinfo = new SpannableString(quest.info);
-                    strickedinfo.setSpan(new StrikethroughSpan(), 0, quest.info.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    questDisplay.setText(strickedinfo);
-                }
-                Log.d(TAG, String.valueOf(quest.getCompletionDate()));
 
-                 */
                     questUpdateCallback.call(quest);
                 }
             });
         }
 
-        /*
-        questDisplay.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                quest.completed = isChecked;
-                if (isChecked) {
-                    quest.completionDate = new Date().getTime();
-                    Log.d(TAG, String.valueOf(quest.getCompletionDate()));
-                }
-                questUpdateCallback.call(quest);
-            }
-        });
-
-         */
     }
 
     public static QuestViewHolder create(ViewGroup parent){
