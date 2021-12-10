@@ -1,20 +1,15 @@
 package rkan.project.questlog;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.widget.ViewPager2;
-
-import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Date;
 import java.util.List;
@@ -40,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChanged(List<Quest> quests) {
 
                 for (Quest q :
-                        quests) { //TODO this may cause a null pointer error
+                        quests) {
                     if (diffInDays(new Date(), q.getCompletionDate()) >= 1) {
                         Log.d(TAG, "Archiving a quest " + q.info);
                         q.archived = true;
@@ -56,62 +51,6 @@ public class MainActivity extends AppCompatActivity {
 
         ViewPager2 guildPager = findViewById(R.id.guild_pager);
         guildPager.setAdapter(new GuildPagerAdapter(getSupportFragmentManager(), getLifecycle()));
-
-
-        /*
-        questInput = findViewById(R.id.questInputText);
-        importantBoard  = findViewById(R.id.importantQuestBoard);
-        urgentBoard     = findViewById(R.id.urgentQuestBoard);
-
-        questViewModel = new ViewModelProvider(this).get(QuestViewModel.class);
-
-        QuestBoard.QuestCallback updateQuestCallback = new QuestBoard.QuestCallback() {
-            @Override
-            public void call(Quest quest) {
-                questViewModel.updateQuest(quest);
-            }
-        };
-
-        questViewModel.getImportantQuests().observe(this, new Observer<List<Quest>>() {
-            @Override
-            public void onChanged(List<Quest> quests) {
-                importantBoard.submitQuests(quests, updateQuestCallback);
-            }
-        });
-        questViewModel.getUrgentQuests().observe(this, new Observer<List<Quest>>() {
-            @Override
-            public void onChanged(List<Quest> quests) {
-                urgentBoard.submitQuests(quests, updateQuestCallback);
-            }
-        });
-
-        QuestBoard.QuestCallback deleteQuestCallback = new QuestBoard.QuestCallback() {
-            @Override
-            public void call(Quest quest) {
-                questViewModel.deleteQuest(quest);
-            }
-        };
-
-        importantBoard.setDeleteQuestCallback(deleteQuestCallback);
-        urgentBoard.setDeleteQuestCallback(deleteQuestCallback);
-
-        QuestBoard.QuestCallback addRequestCallback = new QuestBoard.QuestCallback() {
-            @Override
-            public void call(Quest quest) {
-                quest.info = questInput.getText().toString();
-                if (quest.info.equals("")) {
-                    return;
-                }
-                questViewModel.insert(quest);
-                questInput.setText("");
-            }
-        };
-        importantBoard.setAddRequestCallback(addRequestCallback);
-        urgentBoard.setAddRequestCallback(addRequestCallback);
-
-         */
-
-
     }
 
     public long diffInDays(Date d1, Date d2) {
