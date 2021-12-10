@@ -1,6 +1,9 @@
 package rkan.project.questlog;
 
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.style.StrikethroughSpan;
@@ -9,8 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,7 +48,14 @@ class QuestViewHolder extends RecyclerView.ViewHolder {
                 }
             });
         }
-
+        questDisplay.setLongClickable(true);
+        questDisplay.setOnLongClickListener(v -> {
+            ClipboardManager clipboard = (ClipboardManager) v.getContext().getSystemService(Context.CLIPBOARD_SERVICE);
+            ClipData clip = ClipData.newPlainText("clipLable", quest.info);
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(v.getContext(),"Copied Quest Info to Clipboard", Toast.LENGTH_SHORT).show();
+            return true;
+        });
     }
 
     public static QuestViewHolder create(ViewGroup parent){
