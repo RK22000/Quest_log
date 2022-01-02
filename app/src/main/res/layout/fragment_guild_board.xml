@@ -40,7 +40,8 @@
             android:id="@+id/questInputText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textCapSentences"/>
+            android:inputType="textCapSentences"
+            android:textColor="@color/white"/>
 
         <LinearLayout
             android:id="@+id/questButtonLayout"
